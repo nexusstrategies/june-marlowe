@@ -1,0 +1,47 @@
+/* Sample artist site, version 2: "the gallery wall".
+ * Built with Anthropic frontend-design + impeccable (text) + hallmark checks.
+ * Idea: a deep mulberry museum wall, paintings in white frames hung to scale,
+ * one typeface (Bricolage Grotesque), the sold red dot as the only accent. */
+:root {
+  --wall: #3a2140;        /* Mulberry: the gallery wall */
+  --wall-deep: #2a1730;   /* Shadowed wall, baseboard, footer */
+  --wall-lift: #523159;   /* Raised surfaces on the wall, sofa in the scale drawing */
+  --wall-text: #f4f0e8;   /* Text on the wall */
+  --wall-muted: #d2c3d6;  /* Secondary text on the wall, tinted from the wall hue */
+  --plaster: #f4f0e8;     /* Light rooms: about, shows, contact */
+  --plaster-2: #e9e3d8;
+  --gesso: #fcfbf8;       /* White frames and placards */
+  --soot: #211a24;        /* Ink on light surfaces */
+  --soot-muted: #5d5262;
+  --rule: #cfc6cf;
+  --dot: #d8342b;         /* The gallery "sold" dot */
+  --brass: #c8a45c;       /* Picture rail and hanging wire */
+  --focus-on-wall: #ffd76a;
+  --focus-on-light: #3a2140;
+  --ok: #2f6b4c;
+  --err: #b3261e;
+
+  --font: "Bricolage Grotesque", "Avenir Next Condensed", "Helvetica Neue", sans-serif;
+
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.3125rem;
+  --text-xl: 1.75rem;
+  --text-2xl: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
+  --text-display: clamp(3.25rem, 1.2rem + 9.5vw, 6rem);
+
+  --s-1: 0.25rem; --s-2: 0.5rem; --s-3: 0.75rem; --s-4: 1rem; --s-5: 1.5rem;
+  --s-6: 2rem; --s-7: 3rem; --s-8: 4.5rem; --s-9: 7rem;
+
+  --gutter: clamp(1rem, 0.2rem + 3.6vw, 3rem);
+  --page: 78rem;
+  --ppi: clamp(15px, 1.32vw, 19px);  /* wall scale: one inch of painting = this many pixels */
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 150ms; --dur-2: 320ms; --dur-3: 900ms;
+
+  --shadow-hang: 0 1px 2px rgb(0 0 0 / 0.35), 0 14px 22px -10px rgb(0 0 0 / 0.55), 0 30px 50px -24px rgb(0 0 0 / 0.5);
+  --shadow-hang-up: 0 2px 3px rgb(0 0 0 / 0.3), 0 22px 30px -12px rgb(0 0 0 / 0.6), 0 44px 64px -26px rgb(0 0 0 / 0.55);
+}
+@media (max-width: 40rem) { :root { --ppi: 17px; } }
