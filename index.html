@@ -40,7 +40,7 @@
     <div class="hero-words">
       <h1>June Marlowe</h1>
       <p class="lede">Paintings of flowers, fruit and front doors.</p>
-      <p class="sub">Painted in acrylic at a kitchen table. Ten are on the wall below, hung to scale. Eight are still for sale.</p>
+      <p class="sub">Painted in acrylic at a kitchen table. Ten are on the wall below, hung to scale. <span id="left-count">Eight are</span> still for sale.</p>
       <a class="btn" href="#paintings">See the paintings</a>
     </div>
     <div class="hang" id="featured"></div>
@@ -129,7 +129,7 @@
 
 <dialog class="view" id="view" aria-labelledby="v-title">
   <div class="view-bar"><button class="back" type="button" id="v-back">Back to the wall</button></div>
-  <div class="wrap view-inner">
+  <div class="wrap view-inner" id="pane-view">
     <div class="view-art"><div class="frame"><img id="v-img" src="" alt=""></div></div>
     <div class="view-info">
       <h2 id="v-title"></h2>
@@ -139,7 +139,7 @@
         <button class="btn" type="button" id="v-buy">Buy this painting</button>
         <button class="btn ghost" type="button" id="v-ask">Ask a question</button>
       </div>
-      <p class="demo-note" id="v-note" hidden>Demo only. On a live site this opens secure checkout, and the painting gets its red dot the moment it is paid for.</p>
+      <p class="lock-line" id="v-lock"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2h1v7.5h-9V7zm1.5 0h4V5a2 2 0 0 0-4 0z"/></svg>Secure checkout. June never sees your card number.</p>
       <dl class="facts">
         <dt>Medium</dt><dd>Acrylic on canvas</dd>
         <dt>Size</dt><dd id="v-size"></dd>
@@ -151,6 +151,96 @@
         <p>To scale above a 7-foot sofa.</p>
       </figure>
     </div>
+  </div>
+
+  <!-- sample checkout: nothing here can be typed into, and nothing is sent anywhere -->
+  <div class="wrap till" id="pane-pay" hidden>
+    <p class="till-sample">Sample checkout. Nothing is charged, and no real card can be typed here.</p>
+    <div class="till-grid">
+      <section class="sheet" aria-labelledby="pay-title">
+        <p class="lock-line on-paper"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2h1v7.5h-9V7zm1.5 0h4V5a2 2 0 0 0-4 0z"/></svg>Secure checkout</p>
+        <h2 id="pay-title" tabindex="-1">Pay for your painting</h2>
+        <p class="sheet-note">The boxes are filled in with a made-up buyer so you can see every step.</p>
+
+        <h3>Where it is going</h3>
+        <dl class="locked">
+          <div class="wide"><dt>Email for your receipt</dt><dd>sample.buyer@example.com</dd></div>
+          <div class="wide"><dt>Name</dt><dd>Sample Buyer</dd></div>
+          <div class="wide"><dt>Street address</dt><dd>12 Maple Street</dd></div>
+          <div><dt>Town</dt><dd>Anytown, NJ</dd></div>
+          <div><dt>ZIP</dt><dd>07700</dd></div>
+        </dl>
+
+        <h3>Card</h3>
+        <dl class="locked">
+          <div class="wide"><dt>Card number</dt><dd>4242 4242 4242 4242</dd></div>
+          <div><dt>Expires</dt><dd>12 / 29</dd></div>
+          <div><dt>Security code</dt><dd>123</dd></div>
+        </dl>
+
+        <ul class="safe">
+          <li><strong>Your card number is scrambled the moment you type it.</strong> It goes straight to the payment company. June never sees it and it is never stored on this website.</li>
+          <li><strong>The payment company runs the checkout, not June.</strong> It follows the card industry's security rules, the same ones big online shops follow.</li>
+          <li><strong>You get a receipt by email</strong> as soon as you pay.</li>
+        </ul>
+
+        <button class="btn" type="button" id="pay-btn">Pay</button>
+      </section>
+
+      <aside class="slip" aria-label="Your order">
+        <div class="slip-art"><div class="frame"><img id="pay-img" src="" alt=""></div></div>
+        <p class="slip-title" id="pay-name"></p>
+        <p class="slip-sub" id="pay-size"></p>
+        <dl class="sums">
+          <dt>Painting</dt><dd id="pay-price"></dd>
+          <dt>Shipping, packed by hand</dt><dd id="pay-ship"></dd>
+          <dt class="total">Total</dt><dd class="total" id="pay-total"></dd>
+        </dl>
+      </aside>
+    </div>
+  </div>
+
+  <!-- sample order confirmation -->
+  <div class="wrap till" id="pane-done" hidden>
+    <p class="till-sample">Sample order. Nothing was charged. Reload the page and this painting is for sale again.</p>
+    <div class="till-grid">
+      <section class="sheet" aria-labelledby="done-title">
+        <p class="sold-stamp"><span class="sold">Sold</span></p>
+        <h2 id="done-title" tabindex="-1"></h2>
+        <p class="sheet-note" id="done-line"></p>
+
+        <h3>What happens next</h3>
+        <ol class="steps">
+          <li><strong>Your receipt is in your inbox.</strong> It went to sample.buyer@example.com the moment you paid.</li>
+          <li><strong>June packs it by hand</strong> and sends it within 3 days.</li>
+          <li><strong>You get a tracking number by email</strong> when it leaves.</li>
+        </ol>
+
+        <button class="btn" type="button" id="done-back">Back to the wall</button>
+      </section>
+
+      <aside class="slip" aria-label="Your receipt">
+        <p class="slip-kicker" id="done-order"></p>
+        <div class="slip-art"><div class="frame"><img id="done-img" src="" alt=""></div></div>
+        <p class="slip-title" id="done-name"></p>
+        <p class="slip-sub" id="done-size"></p>
+        <dl class="sums">
+          <dt>Painting</dt><dd id="done-price"></dd>
+          <dt>Shipping</dt><dd id="done-ship"></dd>
+          <dt class="total">Paid</dt><dd class="total" id="done-total"></dd>
+        </dl>
+        <p class="slip-sub">Card ending 4242</p>
+      </aside>
+    </div>
+
+    <section class="artist-side" aria-labelledby="artist-title">
+      <h3 id="artist-title">Meanwhile, what June sees</h3>
+      <ul>
+        <li><strong>An email that says it sold.</strong> It has the buyer's name and shipping address. It never has the card number.</li>
+        <li><strong>A red dot on the painting.</strong> The website marks it sold by itself, so it cannot be bought twice.</li>
+        <li><strong>The money in her bank account</strong> a few business days later. She never handles a card or a payment herself.</li>
+      </ul>
+    </section>
   </div>
 </dialog>
 

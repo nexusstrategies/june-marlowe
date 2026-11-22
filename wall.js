@@ -86,13 +86,45 @@ function scaleDrawing(p) {
   </svg>`;
 }
 
-// painting view
+// painting view, with three screens inside it: the painting, the sample checkout, the sample confirmation
 const view = $("view");
 let current = null;
+const SHIPPING = 15;
+const PANES = { view: "Back to the wall", pay: "Back to the painting", done: "Back to the wall" };
+let pane = "view";
+function show(name) {
+  pane = name;
+  view.dataset.pane = name;
+  for (const key of Object.keys(PANES)) $("pane-" + key).hidden = key !== name;
+  $("v-back").textContent = PANES[name];
+  view.scrollTop = 0;
+  const head = { pay: "pay-title", done: "done-title" }[name];
+  if (head) $(head).focus({ preventScroll: true });
+}
+const COUNT_WORDS = ["None are", "One is", "Two are", "Three are", "Four are", "Five are", "Six are", "Seven are", "Eight are", "Nine are", "Ten are"];
+function markSold(p) {
+  p.sold = true;
+  document.querySelectorAll(`.work-btn[data-id="${p.id}"]`).forEach((b) => b.setAttribute("aria-label", label(p)));
+  const fig = wall.querySelector(`.work[data-id="${p.id}"]`);
+  if (fig) fig.dataset.available = "no";
+  const tag = fig ? fig.querySelector(".cost") : document.querySelector("#featured .cost");
+  if (tag) tag.outerHTML = cost(p);
+  $("left-count").textContent = COUNT_WORDS[PAINTINGS.filter((x) => !x.sold).length];
+}
+function fillSlip(prefix, p) {
+  const img = $(prefix + "-img");
+  img.src = `images/sm/${p.id}.jpg`; img.alt = p.alt; img.width = p.w; img.height = p.h;
+  $(prefix + "-name").textContent = p.title;
+  $(prefix + "-size").textContent = `Acrylic on canvas, ${size(p)}`;
+  $(prefix + "-price").textContent = money(p.price);
+  $(prefix + "-ship").textContent = money(SHIPPING);
+  $(prefix + "-total").textContent = money(p.price + SHIPPING);
+}
 document.addEventListener("click", (e) => {
   const btn = e.target.closest(".work-btn");
   if (!btn) return;
   current = PAINTINGS.find((p) => p.id === btn.dataset.id);
+  show("view");
   const img = $("v-img");
   img.src = `images/${current.id}.jpg`; img.alt = current.alt; img.width = current.w; img.height = current.h;
   $("v-title").textContent = current.title;
@@ -105,16 +137,40 @@ document.addEventListener("click", (e) => {
   buy.textContent = current.sold ? "This one has sold" : "Buy this painting";
   buy.removeAttribute("data-state");
   $("v-ask").textContent = current.sold ? "Ask for one like it" : "Ask a question";
-  $("v-note").hidden = true;
+  $("v-lock").hidden = !!current.sold;
   view.showModal();
   view.scrollTop = 0;
 });
-$("v-back").addEventListener("click", () => view.close());
+$("v-back").addEventListener("click", () => (pane === "pay" ? show("view") : view.close()));
+view.addEventListener("close", () => show("view"));
+
+// sample checkout: every box is filled in and locked, nothing is sent anywhere
+const payBtn = $("pay-btn");
 $("v-buy").addEventListener("click", () => {
-  const b = $("v-buy");
-  b.dataset.state = "loading"; b.textContent = "Opening checkout…";
-  setTimeout(() => { b.removeAttribute("data-state"); b.textContent = "Buy this painting"; $("v-note").hidden = false; }, 700);
+  fillSlip("pay", current);
+  payBtn.removeAttribute("data-state"); payBtn.disabled = false;
+  payBtn.textContent = `Pay ${money(current.price + SHIPPING)}`;
+  show("pay");
 });
+payBtn.addEventListener("click", () => {
+  if (payBtn.dataset.state === "loading") return;
+  payBtn.dataset.state = "loading"; payBtn.textContent = "Paying securely…";
+  const p = current;
+  setTimeout(() => {
+    markSold(p);
+    fillSlip("done", p);
+    $("done-title").textContent = `${p.title} is yours.`;
+    $("done-line").textContent = "Thank you, Sample Buyer. Your payment went through and the painting is marked sold.";
+    $("done-order").textContent = `Order 10${String(PAINTINGS.indexOf(p) + 41)}`;
+    const buy = $("v-buy");
+    buy.disabled = true; buy.textContent = "This one has sold";
+    $("v-cost").innerHTML = '<span class="sold">Sold</span>';
+    $("v-ask").textContent = "Ask for one like it";
+    $("v-lock").hidden = true;
+    show("done");
+  }, 1100);
+});
+$("done-back").addEventListener("click", () => view.close());
 $("v-ask").addEventListener("click", () => {
   view.close();
   document.querySelector('textarea[name="message"]').value = current.sold
